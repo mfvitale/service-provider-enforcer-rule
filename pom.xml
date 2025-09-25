@@ -14,6 +14,7 @@
     <description>Maven Enforcer rule to verify ServiceLoader implementations are properly registered in
         META-INF/services
     </description>
+    <url>https://github.com/mfvitale/service-provider-enforcer-rule</url>
 
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
