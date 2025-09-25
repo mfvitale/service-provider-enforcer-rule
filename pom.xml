@@ -7,7 +7,7 @@
 
     <groupId>io.flomava</groupId>
     <artifactId>service-provider-enforcer-rule</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Service Provider Registration Enforcer Rule</name>
@@ -200,7 +200,7 @@
                                     </sonatype>
                                 </mavenCentral>
                             </maven>
-                        </deploy>
+                        </deploy>-->
                     </jreleaser>
                 </configuration>
             </plugin>
