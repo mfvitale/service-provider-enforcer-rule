@@ -106,3 +106,4 @@ Add the enforcer rule to your Maven `pom.xml`:
 - Supports Java 8+ for SPI files and Java 9+ for module-based services.
 - Skips inner classes automatically.
 - Can handle comments and blank lines in `META-INF/services` files.
+- Currently, classes from dependencies (or other modules in a multi-module project) are not checked.
