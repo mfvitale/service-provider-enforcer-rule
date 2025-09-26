@@ -104,22 +104,164 @@ public class ServiceRegistrationRule extends AbstractEnforcerRule {
 
     private ServiceCheckResult checkServiceInterface(Path classesDir, String serviceInterface) throws IOException {
 
+        getLog().debug("=== Checking service interface: " + serviceInterface + " ===");
+
         Set<String> implementations = findImplementations(classesDir, serviceInterface);
-        getLog().debug("Found " + implementations.size() + " implementations of " + serviceInterface + ": " + implementations);
+        getLog().debug("Found " + implementations.size() + " implementations: " + implementations);
 
         Set<String> registeredServices = readRegisteredServices(classesDir, serviceInterface);
-        getLog().debug("Found " + registeredServices.size() + " registered services for " + serviceInterface + ": " + registeredServices);
+        getLog().debug("Found " + registeredServices.size() + " registered services: " + registeredServices);
 
         Set<String> unregistered = new HashSet<>(implementations);
         unregistered.removeAll(registeredServices);
+        getLog().debug("Unregistered implementations: " + unregistered);
 
         Set<String> nonExistent = new HashSet<>(registeredServices);
         nonExistent.removeAll(implementations);
+        getLog().debug("Non-existent registrations: " + nonExistent);
 
         return new ServiceCheckResult(serviceInterface, implementations, registeredServices, unregistered, nonExistent);
     }
 
+    /**
+     * Find all classes implementing the specified interface
+     */
+    private Set<String> findImplementations(Path classesDir, String serviceInterface) throws IOException {
+        getLog().debug("Looking for implementations of " + serviceInterface + " in " + classesDir);
+
+        Set<String> candidateImplementations = new HashSet<>();
+        Map<String, ClassNode> classNodes = new HashMap<>();
+
+        // First pass: collect all class nodes
+        try (Stream<Path> paths = Files.walk(classesDir)) {
+            paths.filter(path -> path.toString().endsWith(CLASS_FILE_EXTENTION))
+                    .filter(path -> !path.toString().contains(INNER_CLASS_PREFIX))
+                    .forEach(classFile -> {
+                        try {
+                            String className = getClassName(classesDir, classFile);
+                            getLog().debug("Found class file: " + classFile + " -> " + className);
+
+                            if (shouldScanClass(className)) {
+                                getLog().debug("Scanning class: " + className);
+                                try (InputStream is = Files.newInputStream(classFile)) {
+                                    ClassReader reader = new ClassReader(is);
+                                    ClassNode classNode = new ClassNode();
+                                    reader.accept(classNode, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
+                                    classNodes.put(classNode.name, classNode);
+                                    getLog().debug("Loaded ClassNode: " + classNode.name +
+                                            ", access=" + classNode.access +
+                                            ", superName=" + classNode.superName +
+                                            ", interfaces=" + classNode.interfaces);
+                                }
+                            } else {
+                                getLog().debug("Skipping class (not in scan packages): " + className);
+                            }
+                        } catch (Exception e) {
+                            getLog().error("Error reading class file: " + classFile + " - " + e.getMessage());
+                        }
+                    });
+        }
+
+        getLog().debug("Collected " + classNodes.size() + " class nodes");
+
+        // Second pass: find all concrete classes implementing/extending serviceInterface
+        for (ClassNode node : classNodes.values()) {
+            String className = node.name.replace('/', '.');
+            getLog().debug("Checking node: " + className +
+                    ", isInterface=" + ((node.access & Opcodes.ACC_INTERFACE) != 0) +
+                    ", isAbstract=" + ((node.access & Opcodes.ACC_ABSTRACT) != 0));
+
+            if ((node.access & Opcodes.ACC_INTERFACE) != 0 || (node.access & Opcodes.ACC_ABSTRACT) != 0) {
+                getLog().debug("Skipping " + className + " (interface or abstract)");
+                continue; // skip interfaces and abstract classes
+            }
+
+            getLog().debug("Checking if " + className + " implements/extends " + serviceInterface);
+            if (checkClassImplementsInterfaceOrExtendsClass(node, serviceInterface, classNodes, new HashSet<>())) {
+                getLog().debug("✓ " + className + " IS an implementation of " + serviceInterface);
+                candidateImplementations.add(className);
+            } else {
+                getLog().debug("✗ " + className + " is NOT an implementation of " + serviceInterface);
+            }
+        }
+
+        getLog().debug("Final implementations found: " + candidateImplementations);
+        return candidateImplementations;
+    }
+
+    private boolean checkClassImplementsInterfaceOrExtendsClass(ClassNode classNode, String serviceInterface, Map<String, ClassNode> classNodes, Set<String> visited) {
+        if (classNode == null) {
+            getLog().debug("  ClassNode is null, returning false");
+            return false;
+        }
+
+        if (visited.contains(classNode.name)) {
+            getLog().debug("  Already visited " + classNode.name + ", returning false to avoid cycle");
+            return false; // Avoid cycles
+        }
+        visited.add(classNode.name);
+
+        String internalServiceName = serviceInterface.replace('.', '/');
+        String currentClassName = classNode.name.replace('/', '.');
+
+        getLog().debug("  Checking " + currentClassName + " against " + serviceInterface);
+        getLog().debug("    classNode.name=" + classNode.name);
+        getLog().debug("    internalServiceName=" + internalServiceName);
+        getLog().debug("    superName=" + classNode.superName);
+        getLog().debug("    interfaces=" + classNode.interfaces);
+
+        // Direct match - check if this class IS the service interface/class we're looking for
+        if (classNode.name.equals(internalServiceName)) {
+            getLog().debug("  ✓ Direct match: " + currentClassName + " IS " + serviceInterface);
+            return true;
+        }
+
+        // Check implemented interfaces
+        if (classNode.interfaces != null) {
+            for (String interfaceName : classNode.interfaces) {
+                getLog().info("  Checking interface: " + interfaceName);
+                if (interfaceName.equals(internalServiceName)) {
+                    getLog().debug("  ✓ Interface match: " + currentClassName + " implements " + serviceInterface);
+                    return true;
+                }
+                // Try to load from collected classNodes first, then fallback to loadClassNode
+                ClassNode ifaceNode = classNodes.get(interfaceName);
+                if (ifaceNode == null) {
+                    getLog().debug("  Interface " + interfaceName + " not in classNodes, trying loadClassNode");
+                    ifaceNode = loadClassNode(interfaceName);
+                } else {
+                    getLog().debug("  Interface " + interfaceName + " found in classNodes");
+                }
+                if (ifaceNode != null && checkClassImplementsInterfaceOrExtendsClass(ifaceNode, serviceInterface, classNodes, visited)) {
+                    getLog().debug("  ✓ Inheritance match via interface: " + currentClassName + " -> " + interfaceName.replace('/', '.') + " -> " + serviceInterface);
+                    return true;
+                }
+            }
+        }
+
+        // Check superclass recursively
+        if (classNode.superName != null && !classNode.superName.equals(OBJECT_CLASS)) {
+            getLog().debug("  Checking superclass: " + classNode.superName);
+            // Try to load from collected classNodes first, then fallback to loadClassNode
+            ClassNode superNode = classNodes.get(classNode.superName);
+            if (superNode == null) {
+                getLog().debug("  Superclass " + classNode.superName + " not in classNodes, trying loadClassNode");
+                superNode = loadClassNode(classNode.superName);
+            } else {
+                getLog().debug("  Superclass " + classNode.superName + " found in classNodes");
+            }
+            if (superNode != null && checkClassImplementsInterfaceOrExtendsClass(superNode, serviceInterface, classNodes, visited)) {
+                getLog().debug("  ✓ Inheritance match via superclass: " + currentClassName + " -> " + classNode.superName.replace('/', '.') + " -> " + serviceInterface);
+                return true;
+            }
+        }
+
+        getLog().debug("  ✗ No match found for " + currentClassName);
+        return false;
+    }
+
     private void reportResults(Map<String, ServiceCheckResult> results) {
+
 
         for (ServiceCheckResult result : results.values()) {
             String interfaceName = result.serviceInterface();
@@ -174,170 +316,37 @@ public class ServiceRegistrationRule extends AbstractEnforcerRule {
         }
     }
 
-
-    /**
-     * Find all classes implementing the specified interface
-     */
-    private Set<String> findImplementations(Path classesDir, String serviceInterface) throws IOException {
-        Set<String> candidateImplementations = new HashSet<>();
-        Map<String, ClassNode> classNodes = new HashMap<>();
-
-        // First pass: collect all class nodes
-        try (Stream<Path> paths = Files.walk(classesDir)) {
-            paths.filter(path -> path.toString().endsWith(CLASS_FILE_EXTENTION))
-                    .filter(path -> !path.toString().contains(INNER_CLASS_PREFIX))
-                    .forEach(classFile -> {
-                        try {
-                            String className = getClassName(classesDir, classFile);
-                            if (shouldScanClass(className)) {
-                                try (InputStream is = Files.newInputStream(classFile)) {
-                                    ClassReader reader = new ClassReader(is);
-                                    ClassNode classNode = new ClassNode();
-                                    reader.accept(classNode, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
-                                    classNodes.put(classNode.name, classNode);
-                                }
-                            }
-                        } catch (Exception e) {
-                            getLog().debug("Error reading class file: " + classFile + " - " + e.getMessage());
-                        }
-                    });
-        }
-
-        // Second pass: find all concrete classes implementing/extending serviceInterface
-        for (ClassNode node : classNodes.values()) {
-            if ((node.access & Opcodes.ACC_INTERFACE) != 0 || (node.access & Opcodes.ACC_ABSTRACT) != 0) {
-                continue; // skip interfaces and abstract classes
-            }
-            if (checkClassImplementsInterfaceOrExtendsClass(node, serviceInterface, new HashSet<>())) {
-                candidateImplementations.add(node.name.replace('/', '.'));
-            }
-        }
-
-        // Third pass: filter out intermediate classes (keep only leaf concrete classes)
-        Set<String> leafImplementations = new HashSet<>(candidateImplementations);
-        for (String impl : candidateImplementations) {
-            ClassNode node = classNodes.get(impl.replace('.', '/'));
-            if (node == null) continue;
-            for (ClassNode other : classNodes.values()) {
-                if (other == node) continue;
-                if ((other.access & Opcodes.ACC_INTERFACE) != 0 || (other.access & Opcodes.ACC_ABSTRACT) != 0) continue;
-                String superName = other.superName;
-                while (superName != null && !superName.equals(OBJECT_CLASS)) {
-                    if (superName.equals(node.name)) {
-                        leafImplementations.remove(impl.replace('/', '.')); // has a concrete subclass, remove
-                        break;
-                    }
-                    ClassNode superNode = classNodes.get(superName);
-                    if (superNode != null) {
-                        superName = superNode.superName;
-                    } else {
-                        break;
-                    }
-                }
-            }
-        }
-
-        return leafImplementations;
-    }
-
     private boolean shouldScanClass(String className) {
 
         if (packagesToScan.isEmpty()) {
             return true;
         }
-        
+
         return packagesToScan.stream()
                 .anyMatch(className::startsWith);
-    }
-
-    private boolean checkClassImplementsInterfaceOrExtendsClass(ClassNode classNode, String serviceInterface, Set<String> visited) {
-        if (visited.contains(classNode.name)) {
-            return false;
-        }
-        visited.add(classNode.name);
-
-        String internalServiceName = serviceInterface.replace('.', '/');
-        String currentClassName = classNode.name.replace('/', '.');
-
-        getLog().debug("Checking if " + currentClassName + " implements/extends " + serviceInterface);
-
-        // Check if this class IS the service type (exact match)
-        if (classNode.name.equals(internalServiceName)) {
-            getLog().debug("  -> Found exact class match");
-            return true;
-        }
-
-        // Check if this class directly implements the interface
-        if (classNode.interfaces != null && classNode.interfaces.contains(internalServiceName)) {
-            getLog().debug("  -> Found direct interface implementation");
-            return true;
-        }
-
-        // Check superclass hierarchy - this handles both abstract classes and interface inheritance
-        if (classNode.superName != null && !classNode.superName.equals(OBJECT_CLASS)) {
-            String superClassName = classNode.superName.replace('/', '.');
-            getLog().debug("  -> Checking superclass: " + superClassName);
-
-            // Direct superclass match (for abstract service types)
-            if (classNode.superName.equals(internalServiceName)) {
-                getLog().debug("  -> Found direct superclass match");
-                return true;
-            }
-
-            // Recursive check up the inheritance hierarchy
-            try {
-                ClassNode superClass = loadClassNode(classNode.superName);
-                if (superClass != null) {
-                    if (checkClassImplementsInterfaceOrExtendsClass(superClass, serviceInterface, visited)) {
-                        getLog().debug("  -> Found match through superclass hierarchy");
-                        return true;
-                    }
-                } else {
-                    getLog().debug("  -> Could not load superclass: " + superClassName);
-                }
-            } catch (Exception e) {
-                getLog().error("Could not load superclass: " + classNode.superName + " - " + e.getMessage());
-            }
-        }
-
-        // Check implemented interfaces recursively
-        if (classNode.interfaces != null) {
-            for (String interfaceName : classNode.interfaces) {
-                try {
-                    ClassNode interfaceClass = loadClassNode(interfaceName);
-                    if (interfaceClass != null && checkClassImplementsInterfaceOrExtendsClass(interfaceClass, serviceInterface, visited)) {
-                        getLog().debug("  -> Found match through interface hierarchy");
-                        return true;
-                    }
-                } catch (Exception e) {
-                    getLog().error("Could not load interface: " + interfaceName + " - " + e.getMessage());
-                }
-            }
-        }
-
-        getLog().debug("  -> No match found for " + currentClassName);
-        return false;
     }
 
     /**
      * Load a ClassNode from either the project's classes or the classpath
      */
-    private ClassNode loadClassNode(String internalClassName) throws IOException {
-
-        String outputDirectory = project.getBuild().getOutputDirectory();
-        Path classFile = Paths.get(outputDirectory).resolve(internalClassName + CLASS_FILE_EXTENTION);
-
-        if (Files.exists(classFile)) {
-            try (InputStream is = Files.newInputStream(classFile)) {
-                ClassReader reader = new ClassReader(is);
-                ClassNode classNode = new ClassNode();
-                reader.accept(classNode, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
-                return classNode;
-            }
-        }
-
-        String className = internalClassName.replace('/', '.');
+    private ClassNode loadClassNode(String internalClassName) {
         try {
+            String outputDirectory = project.getBuild().getOutputDirectory();
+
+            // Convert internal class name to path
+            String classFilePath = internalClassName.replace('/', File.separatorChar) + CLASS_FILE_EXTENTION;
+            Path classFile = Paths.get(outputDirectory).resolve(classFilePath);
+
+            if (Files.exists(classFile)) {
+                try (InputStream is = Files.newInputStream(classFile)) {
+                    ClassReader reader = new ClassReader(is);
+                    ClassNode classNode = new ClassNode();
+                    reader.accept(classNode, ClassReader.SKIP_CODE | ClassReader.SKIP_DEBUG | ClassReader.SKIP_FRAMES);
+                    return classNode;
+                }
+            }
+
+            // Fallback: try classpath
             InputStream is = getClass().getClassLoader().getResourceAsStream(internalClassName + CLASS_FILE_EXTENTION);
             if (is != null) {
                 try (InputStream stream = is) {
@@ -347,8 +356,11 @@ public class ServiceRegistrationRule extends AbstractEnforcerRule {
                     return classNode;
                 }
             }
+
+            getLog().debug("Could not load class (not found): " + internalClassName);
+
         } catch (Exception e) {
-            getLog().debug("Could not load class from classpath: " + className + " - " + e.getMessage());
+            getLog().debug("Could not load class: " + internalClassName + " - " + e.getMessage());
         }
 
         return null;

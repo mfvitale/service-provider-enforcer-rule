@@ -1,5 +1,6 @@
 package io.flomava;
 
+import io.flomava.logger.Slf4jEnforcerLoggerAdapter;
 import org.apache.maven.enforcer.rule.api.EnforcerLogger;
 import org.apache.maven.enforcer.rule.api.EnforcerRuleException;
 import org.apache.maven.execution.MavenSession;
@@ -25,6 +26,7 @@ import java.util.Collections;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
@@ -63,11 +65,11 @@ public class ServiceRegistrationRuleTest {
         when(project.getBuild()).thenReturn(build);
         when(build.getOutputDirectory()).thenReturn(classesDir.toString());
 
-        rule = new ServiceRegistrationRule(project, session, runtimeInformation);
+        rule = spy(new ServiceRegistrationRule(project, session, runtimeInformation));
 
-        // Spy the rule so we can stub getLog()
-        rule = spy(rule);
-        when(rule.getLog()).thenReturn(log);
+        EnforcerLogger slf4jLog = new Slf4jEnforcerLoggerAdapter(ServiceRegistrationRule.class);
+
+        doReturn(slf4jLog).when(rule).getLog();
     }
 
     @Test
@@ -235,28 +237,29 @@ public class ServiceRegistrationRuleTest {
     @Test
     void testExecute_AbstractServiceWithInheritanceChain() throws Exception {
         String abstractService = "com.example.AbstractTestService";
-        String intermediateClass = "com.example.BaseTestServiceImpl";
+        String intermediateClass = "com.example.AbstractBaseTestServiceImpl";
         String concreteImpl = "com.example.ConcreteTestServiceImpl";
 
         // Create abstract service class
         createAbstractServiceClass(abstractService);
 
-        // Create intermediate class that extends the abstract service
-        createConcreteImplementation(intermediateClass, abstractService);
+        // Create intermediate ABSTRACT class that extends the abstract service
+        createAbstractServiceClass(intermediateClass, abstractService); // Make this abstract too
 
         // Create concrete implementation that extends the intermediate class
         createConcreteImplementation(concreteImpl, intermediateClass);
 
-        // Register the concrete implementation
+        // Register only the concrete implementation
         createServiceRegistration(abstractService, concreteImpl);
 
         rule.setServiceInterfaces(Arrays.asList(abstractService));
         rule.setStrategy(ServiceRegistrationRule.EnforcementStrategy.FAIL);
 
-        // Should succeed because the concrete implementation inherits from the abstract service
-        // through the inheritance chain: ConcreteImpl -> BaseImpl -> AbstractService
+        // Should succeed because only the final concrete implementation needs registration
         assertDoesNotThrow(() -> rule.execute());
     }
+
+
 
     @Test
     void testExecute_AbstractServiceWithUnregisteredInheritanceChain() throws Exception {
@@ -285,17 +288,19 @@ public class ServiceRegistrationRuleTest {
         assertTrue(exception.getMessage().contains("Service registration violations found"));
     }
 
-    private void createAbstractServiceClass(String className) throws IOException {
+    private void createAbstractServiceClass(String className, String parentClass) throws IOException {
+
         Path classFile = createClassFile(className);
 
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
         String internalName = className.replace('.', '/');
+        String parentClassInternalName = parentClass.replace('.', '/');
 
         cw.visit(Opcodes.V11,
                 Opcodes.ACC_PUBLIC + Opcodes.ACC_ABSTRACT,
                 internalName,
                 null,
-                "java/lang/Object",
+                parentClassInternalName,
                 null);
 
         // Add default constructor
@@ -310,6 +315,12 @@ public class ServiceRegistrationRuleTest {
 
         cw.visitEnd();
         Files.write(classFile, cw.toByteArray());
+    }
+
+    private void createAbstractServiceClass(String className) throws IOException {
+
+        createAbstractServiceClass(className, "java.lang.Object");
+
     }
 
     private void createConcreteImplementation(String className, String parentClassName) throws IOException {
