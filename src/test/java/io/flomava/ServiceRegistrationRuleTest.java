@@ -65,7 +65,7 @@ public class ServiceRegistrationRuleTest {
 
         rule = new ServiceRegistrationRule(project, session, runtimeInformation);
 
-        // Mock the getLog() method by using a spy
+        // Spy the rule so we can stub getLog()
         rule = spy(rule);
         when(rule.getLog()).thenReturn(log);
     }
@@ -232,6 +232,113 @@ public class ServiceRegistrationRuleTest {
         assertDoesNotThrow(() -> rule.execute());
     }
 
+    @Test
+    void testExecute_AbstractServiceWithInheritanceChain() throws Exception {
+        String abstractService = "com.example.AbstractTestService";
+        String intermediateClass = "com.example.BaseTestServiceImpl";
+        String concreteImpl = "com.example.ConcreteTestServiceImpl";
+
+        // Create abstract service class
+        createAbstractServiceClass(abstractService);
+
+        // Create intermediate class that extends the abstract service
+        createConcreteImplementation(intermediateClass, abstractService);
+
+        // Create concrete implementation that extends the intermediate class
+        createConcreteImplementation(concreteImpl, intermediateClass);
+
+        // Register the concrete implementation
+        createServiceRegistration(abstractService, concreteImpl);
+
+        rule.setServiceInterfaces(Arrays.asList(abstractService));
+        rule.setStrategy(ServiceRegistrationRule.EnforcementStrategy.FAIL);
+
+        // Should succeed because the concrete implementation inherits from the abstract service
+        // through the inheritance chain: ConcreteImpl -> BaseImpl -> AbstractService
+        assertDoesNotThrow(() -> rule.execute());
+    }
+
+    @Test
+    void testExecute_AbstractServiceWithUnregisteredInheritanceChain() throws Exception {
+        String abstractService = "com.example.AbstractTestService";
+        String intermediateClass = "com.example.BaseTestServiceImpl";
+        String concreteImpl = "com.example.ConcreteTestServiceImpl";
+
+        // Create abstract service class
+        createAbstractServiceClass(abstractService);
+
+        // Create intermediate class that extends the abstract service
+        createConcreteImplementation(intermediateClass, abstractService);
+
+        // Create concrete implementation that extends the intermediate class
+        createConcreteImplementation(concreteImpl, intermediateClass);
+
+        // Don't register the concrete implementation (this should cause failure)
+
+        rule.setServiceInterfaces(Arrays.asList(abstractService));
+        rule.setStrategy(ServiceRegistrationRule.EnforcementStrategy.FAIL);
+
+        // Should fail because the concrete implementation is not registered
+        EnforcerRuleException exception = assertThrows(EnforcerRuleException.class,
+                () -> rule.execute());
+
+        assertTrue(exception.getMessage().contains("Service registration violations found"));
+    }
+
+    private void createAbstractServiceClass(String className) throws IOException {
+        Path classFile = createClassFile(className);
+
+        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+        String internalName = className.replace('.', '/');
+
+        cw.visit(Opcodes.V11,
+                Opcodes.ACC_PUBLIC + Opcodes.ACC_ABSTRACT,
+                internalName,
+                null,
+                "java/lang/Object",
+                null);
+
+        // Add default constructor
+        MethodVisitor mv = cw.visitMethod(Opcodes.ACC_PUBLIC, "<init>", "()V", null, null);
+        mv.visitCode();
+        mv.visitVarInsn(Opcodes.ALOAD, 0);
+        mv.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
+        mv.visitInsn(Opcodes.RETURN);
+        // when using COMPUTE_MAXS we can pass 0,0
+        mv.visitMaxs(0, 0);
+        mv.visitEnd();
+
+        cw.visitEnd();
+        Files.write(classFile, cw.toByteArray());
+    }
+
+    private void createConcreteImplementation(String className, String parentClassName) throws IOException {
+        Path classFile = createClassFile(className);
+
+        ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+        String internalName = className.replace('.', '/');
+        String internalParentName = parentClassName.replace('.', '/');
+
+        cw.visit(Opcodes.V11,
+                Opcodes.ACC_PUBLIC,
+                internalName,
+                null,
+                internalParentName,  // Extends the parent class
+                null);
+
+        // Add default constructor
+        MethodVisitor mv = cw.visitMethod(Opcodes.ACC_PUBLIC, "<init>", "()V", null, null);
+        mv.visitCode();
+        mv.visitVarInsn(Opcodes.ALOAD, 0);
+        mv.visitMethodInsn(Opcodes.INVOKESPECIAL, internalParentName, "<init>", "()V", false);
+        mv.visitInsn(Opcodes.RETURN);
+        mv.visitMaxs(0, 0);
+        mv.visitEnd();
+
+        cw.visitEnd();
+        Files.write(classFile, cw.toByteArray());
+    }
+
     private void createTestInterface(String interfaceName) throws IOException {
         Path interfaceFile = createClassFile(interfaceName);
 
@@ -269,7 +376,7 @@ public class ServiceRegistrationRuleTest {
         mv.visitVarInsn(Opcodes.ALOAD, 0);
         mv.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
         mv.visitInsn(Opcodes.RETURN);
-        mv.visitMaxs(1, 1);
+        mv.visitMaxs(0, 0);
         mv.visitEnd();
 
         cw.visitEnd();
@@ -296,17 +403,27 @@ public class ServiceRegistrationRuleTest {
         mv.visitVarInsn(Opcodes.ALOAD, 0);
         mv.visitMethodInsn(Opcodes.INVOKESPECIAL, "java/lang/Object", "<init>", "()V", false);
         mv.visitInsn(Opcodes.RETURN);
-        mv.visitMaxs(1, 1);
+        mv.visitMaxs(0, 0);
         mv.visitEnd();
 
         cw.visitEnd();
         Files.write(classFile, cw.toByteArray());
     }
 
+    /**
+     * Create the class file under classesDir using path segments so that the produced file
+     * matches the real Java compiler layout (e.g. classes/com/example/Foo.class)
+     */
     private Path createClassFile(String className) throws IOException {
-        String classPath = className.replace('.', '/') + ".class";
-        Path classFile = classesDir.resolve(classPath);
-        Files.createDirectories(classFile.getParent());
+        // Build file path segments from the FQN
+        String[] parts = className.split("\\.");
+        Path path = classesDir;
+        for (int i = 0; i < parts.length - 1; i++) {
+            path = path.resolve(parts[i]);
+        }
+        // ensure directories exist
+        Files.createDirectories(path);
+        Path classFile = path.resolve(parts[parts.length - 1] + ".class");
         return classFile;
     }
 
@@ -342,16 +459,12 @@ public class ServiceRegistrationRuleTest {
         Path moduleFile = classesDir.resolve("module-info.class");
 
         ClassWriter cw = new ClassWriter(0);
-        cw.visit(Opcodes.V11,
-                Opcodes.ACC_MODULE,
-                "module-info",
-                null,
-                null,
-                null);
+        // Note: building module-info via ASM is a bit unusual; this creates a minimal module info with a 'provides'
+        cw.visit(Opcodes.V11, Opcodes.ACC_MODULE, "module-info", null, null, null);
 
         ModuleVisitor mv = cw.visitModule(moduleName, Opcodes.ACC_OPEN, null);
-        mv.visitProvide(serviceInterface.replace('.', '/'),
-                implementation.replace('.', '/'));
+        // ASM expects internal names in provides call
+        mv.visitProvide(serviceInterface.replace('.', '/'), new String[]{implementation.replace('.', '/')});
         mv.visitEnd();
 
         cw.visitEnd();
