@@ -86,7 +86,7 @@ public class ServiceRegistrationRule extends AbstractEnforcerRule {
                 ServiceCheckResult result = checkServiceInterface(classesDir, serviceInterface);
                 results.put(serviceInterface, result);
 
-                if (!result.unregistered().isEmpty() || !result.nonExistent().isEmpty()) {
+                if (!result.unregistered().isEmpty()) {
                     hasViolations = true;
                 }
             }
@@ -135,7 +135,7 @@ public class ServiceRegistrationRule extends AbstractEnforcerRule {
 
             boolean failMode = strategy == EnforcementStrategy.FAIL;
 
-            if (failMode) {
+            if (failMode && !result.unregistered().isEmpty()) {
                 getLog().error("─────────────────────────────────────────────");
                 getLog().error("Service Interface: " + interfaceName);
             } else {
@@ -166,7 +166,7 @@ public class ServiceRegistrationRule extends AbstractEnforcerRule {
                 result.nonExistent().forEach(impl -> getLog().warn("    " + impl));
             }
 
-            if (failMode) {
+            if (failMode && !result.unregistered().isEmpty()) {
                 getLog().error("─────────────────────────────────────────────");
             } else {
                 getLog().warn("─────────────────────────────────────────────");
