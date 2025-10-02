@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="io.flomava.ServiceRegistrationRuleTest" time="1.432" tests="13" errors="0" skipped="0" failures="0">
+  <properties>
+    <property name="java.specification.version" value="17"/>
+    <property name="sun.jnu.encoding" value="UTF-8"/>
+    <property name="java.class.path" value="/home/runner/work/service-provider-enforcer-rule/service-provider-enforcer-rule/target/test-classes:/home/runner/work/service-provider-enforcer-rule/service-provider-enforcer-rule/target/classes:/home/runner/.m2/repository/org/apache/maven/enforcer/enforcer-api/3.6.1/enforcer-api-3.6.1.jar:/home/runner/.m2/repository/org/apache/maven/maven-core/3.9.10/maven-core-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/maven-model/3.9.10/maven-model-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/maven-settings/3.9.10/maven-settings-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/maven-settings-builder/3.9.10/maven-settings-builder-3.9.10.jar:/home/runner/.m2/repository/org/codehaus/plexus/plexus-sec-dispatcher/2.0/plexus-sec-dispatcher-2.0.jar:/home/runner/.m2/repository/org/codehaus/plexus/plexus-cipher/2.0/plexus-cipher-2.0.jar:/home/runner/.m2/repository/org/apache/maven/maven-builder-support/3.9.10/maven-builder-support-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/maven-repository-metadata/3.9.10/maven-repository-metadata-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/maven-artifact/3.9.10/maven-artifact-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/maven-plugin-api/3.9.10/maven-plugin-api-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/maven-model-builder/3.9.10/maven-model-builder-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/maven-resolver-provider/3.9.10/maven-resolver-provider-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/resolver/maven-resolver-impl/1.9.23/maven-resolver-impl-1.9.23.jar:/home/runner/.m2/repository/org/apache/maven/resolver/maven-resolver-named-locks/1.9.23/maven-resolver-named-locks-1.9.23.jar:/home/runner/.m2/repository/org/apache/maven/resolver/maven-resolver-api/1.9.23/maven-resolver-api-1.9.23.jar:/home/runner/.m2/repository/org/apache/maven/resolver/maven-resolver-spi/1.9.23/maven-resolver-spi-1.9.23.jar:/home/runner/.m2/repository/org/apache/maven/resolver/maven-resolver-util/1.9.23/maven-resolver-util-1.9.23.jar:/home/runner/.m2/repository/org/apache/maven/shared/maven-shared-utils/3.4.2/maven-shared-utils-3.4.2.jar:/home/runner/.m2/repository/org/eclipse/sisu/org.eclipse.sisu.plexus/0.9.0.M4/org.eclipse.sisu.plexus-0.9.0.M4.jar:/home/runner/.m2/repository/org/eclipse/sisu/org.eclipse.sisu.inject/0.9.0.M4/org.eclipse.sisu.inject-0.9.0.M4.jar:/home/runner/.m2/repository/com/google/inject/guice/5.1.0/guice-5.1.0-classes.jar:/home/runner/.m2/repository/aopalliance/aopalliance/1.0/aopalliance-1.0.jar:/home/runner/.m2/repository/com/google/guava/guava/33.4.8-jre/guava-33.4.8-jre.jar:/home/runner/.m2/repository/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar:/home/runner/.m2/repository/com/google/guava/failureaccess/1.0.3/failureaccess-1.0.3.jar:/home/runner/.m2/repository/org/codehaus/plexus/plexus-utils/3.6.0/plexus-utils-3.6.0.jar:/home/runner/.m2/repository/org/codehaus/plexus/plexus-classworlds/2.9.0/plexus-classworlds-2.9.0.jar:/home/runner/.m2/repository/org/codehaus/plexus/plexus-interpolation/1.28/plexus-interpolation-1.28.jar:/home/runner/.m2/repository/org/codehaus/plexus/plexus-component-annotations/2.2.0/plexus-component-annotations-2.2.0.jar:/home/runner/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar:/home/runner/.m2/repository/org/ow2/asm/asm/9.5/asm-9.5.jar:/home/runner/.m2/repository/org/ow2/asm/asm-tree/9.5/asm-tree-9.5.jar:/home/runner/.m2/repository/org/junit/jupiter/junit-jupiter/5.13.4/junit-jupiter-5.13.4.jar:/home/runner/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.13.4/junit-jupiter-api-5.13.4.jar:/home/runner/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/runner/.m2/repository/org/junit/platform/junit-platform-commons/1.13.4/junit-platform-commons-1.13.4.jar:/home/runner/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/runner/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.13.4/junit-jupiter-params-5.13.4.jar:/home/runner/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.13.4/junit-jupiter-engine-5.13.4.jar:/home/runner/.m2/repository/org/junit/platform/junit-platform-engine/1.13.4/junit-platform-engine-1.13.4.jar:/home/runner/.m2/repository/org/mockito/mockito-core/5.20.0/mockito-core-5.20.0.jar:/home/runner/.m2/repository/net/bytebuddy/byte-buddy/1.17.7/byte-buddy-1.17.7.jar:/home/runner/.m2/repository/net/bytebuddy/byte-buddy-agent/1.17.7/byte-buddy-agent-1.17.7.jar:/home/runner/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/home/runner/.m2/repository/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar:/home/runner/.m2/repository/org/slf4j/slf4j-simple/1.7.36/slf4j-simple-1.7.36.jar:"/>
+    <property name="java.vm.vendor" value="Eclipse Adoptium"/>
+    <property name="sun.arch.data.model" value="64"/>
+    <property name="java.vendor.url" value="https://adoptium.net/"/>
+    <property name="user.timezone" value="Etc/UTC"/>
+    <property name="os.name" value="Linux"/>
+    <property name="java.vm.specification.version" value="17"/>
+    <property name="sun.java.launcher" value="SUN_STANDARD"/>
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/temurin-17-jdk-amd64/lib"/>
+    <property name="sun.java.command" value="/home/runner/work/service-provider-enforcer-rule/service-provider-enforcer-rule/target/surefire/surefirebooter-20251002080542618_3.jar /home/runner/work/service-provider-enforcer-rule/service-provider-enforcer-rule/target/surefire 2025-10-02T08-05-41_747-jvmRun1 surefire-20251002080542618_1tmp surefire_0-20251002080542618_2tmp"/>
+    <property name="jdk.debug" value="release"/>
+    <property name="surefire.test.class.path" value="/home/runner/work/service-provider-enforcer-rule/service-provider-enforcer-rule/target/test-classes:/home/runner/work/service-provider-enforcer-rule/service-provider-enforcer-rule/target/classes:/home/runner/.m2/repository/org/apache/maven/enforcer/enforcer-api/3.6.1/enforcer-api-3.6.1.jar:/home/runner/.m2/repository/org/apache/maven/maven-core/3.9.10/maven-core-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/maven-model/3.9.10/maven-model-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/maven-settings/3.9.10/maven-settings-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/maven-settings-builder/3.9.10/maven-settings-builder-3.9.10.jar:/home/runner/.m2/repository/org/codehaus/plexus/plexus-sec-dispatcher/2.0/plexus-sec-dispatcher-2.0.jar:/home/runner/.m2/repository/org/codehaus/plexus/plexus-cipher/2.0/plexus-cipher-2.0.jar:/home/runner/.m2/repository/org/apache/maven/maven-builder-support/3.9.10/maven-builder-support-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/maven-repository-metadata/3.9.10/maven-repository-metadata-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/maven-artifact/3.9.10/maven-artifact-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/maven-plugin-api/3.9.10/maven-plugin-api-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/maven-model-builder/3.9.10/maven-model-builder-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/maven-resolver-provider/3.9.10/maven-resolver-provider-3.9.10.jar:/home/runner/.m2/repository/org/apache/maven/resolver/maven-resolver-impl/1.9.23/maven-resolver-impl-1.9.23.jar:/home/runner/.m2/repository/org/apache/maven/resolver/maven-resolver-named-locks/1.9.23/maven-resolver-named-locks-1.9.23.jar:/home/runner/.m2/repository/org/apache/maven/resolver/maven-resolver-api/1.9.23/maven-resolver-api-1.9.23.jar:/home/runner/.m2/repository/org/apache/maven/resolver/maven-resolver-spi/1.9.23/maven-resolver-spi-1.9.23.jar:/home/runner/.m2/repository/org/apache/maven/resolver/maven-resolver-util/1.9.23/maven-resolver-util-1.9.23.jar:/home/runner/.m2/repository/org/apache/maven/shared/maven-shared-utils/3.4.2/maven-shared-utils-3.4.2.jar:/home/runner/.m2/repository/org/eclipse/sisu/org.eclipse.sisu.plexus/0.9.0.M4/org.eclipse.sisu.plexus-0.9.0.M4.jar:/home/runner/.m2/repository/org/eclipse/sisu/org.eclipse.sisu.inject/0.9.0.M4/org.eclipse.sisu.inject-0.9.0.M4.jar:/home/runner/.m2/repository/com/google/inject/guice/5.1.0/guice-5.1.0-classes.jar:/home/runner/.m2/repository/aopalliance/aopalliance/1.0/aopalliance-1.0.jar:/home/runner/.m2/repository/com/google/guava/guava/33.4.8-jre/guava-33.4.8-jre.jar:/home/runner/.m2/repository/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.jar:/home/runner/.m2/repository/com/google/guava/failureaccess/1.0.3/failureaccess-1.0.3.jar:/home/runner/.m2/repository/org/codehaus/plexus/plexus-utils/3.6.0/plexus-utils-3.6.0.jar:/home/runner/.m2/repository/org/codehaus/plexus/plexus-classworlds/2.9.0/plexus-classworlds-2.9.0.jar:/home/runner/.m2/repository/org/codehaus/plexus/plexus-interpolation/1.28/plexus-interpolation-1.28.jar:/home/runner/.m2/repository/org/codehaus/plexus/plexus-component-annotations/2.2.0/plexus-component-annotations-2.2.0.jar:/home/runner/.m2/repository/javax/inject/javax.inject/1/javax.inject-1.jar:/home/runner/.m2/repository/org/ow2/asm/asm/9.5/asm-9.5.jar:/home/runner/.m2/repository/org/ow2/asm/asm-tree/9.5/asm-tree-9.5.jar:/home/runner/.m2/repository/org/junit/jupiter/junit-jupiter/5.13.4/junit-jupiter-5.13.4.jar:/home/runner/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.13.4/junit-jupiter-api-5.13.4.jar:/home/runner/.m2/repository/org/opentest4j/opentest4j/1.3.0/opentest4j-1.3.0.jar:/home/runner/.m2/repository/org/junit/platform/junit-platform-commons/1.13.4/junit-platform-commons-1.13.4.jar:/home/runner/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/runner/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.13.4/junit-jupiter-params-5.13.4.jar:/home/runner/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.13.4/junit-jupiter-engine-5.13.4.jar:/home/runner/.m2/repository/org/junit/platform/junit-platform-engine/1.13.4/junit-platform-engine-1.13.4.jar:/home/runner/.m2/repository/org/mockito/mockito-core/5.20.0/mockito-core-5.20.0.jar:/home/runner/.m2/repository/net/bytebuddy/byte-buddy/1.17.7/byte-buddy-1.17.7.jar:/home/runner/.m2/repository/net/bytebuddy/byte-buddy-agent/1.17.7/byte-buddy-agent-1.17.7.jar:/home/runner/.m2/repository/org/objenesis/objenesis/3.3/objenesis-3.3.jar:/home/runner/.m2/repository/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar:/home/runner/.m2/repository/org/slf4j/slf4j-simple/1.7.36/slf4j-simple-1.7.36.jar:"/>
+    <property name="sun.cpu.endian" value="little"/>
+    <property name="user.home" value="/home/runner"/>
+    <property name="user.language" value="en"/>
+    <property name="java.specification.vendor" value="Oracle Corporation"/>
+    <property name="java.version.date" value="2025-07-15"/>
+    <property name="java.home" value="/usr/lib/jvm/temurin-17-jdk-amd64"/>
+    <property name="file.separator" value="/"/>
+    <property name="basedir" value="/home/runner/work/service-provider-enforcer-rule/service-provider-enforcer-rule"/>
+    <property name="java.vm.compressedOopsMode" value="Zero based"/>
+    <property name="line.separator" value="&#10;"/>
+    <property name="java.specification.name" value="Java Platform API Specification"/>
+    <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
+    <property name="surefire.real.class.path" value="/home/runner/work/service-provider-enforcer-rule/service-provider-enforcer-rule/target/surefire/surefirebooter-20251002080542618_3.jar"/>
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
+    <property name="java.runtime.version" value="17.0.16+8"/>
+    <property name="user.name" value="runner"/>
+    <property name="path.separator" value=":"/>
+    <property name="os.version" value="6.11.0-1018-azure"/>
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
+    <property name="file.encoding" value="UTF-8"/>
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM"/>
+    <property name="java.vendor.version" value="Temurin-17.0.16+8"/>
+    <property name="localRepository" value="/home/runner/.m2/repository"/>
+    <property name="java.vendor.url.bug" value="https://github.com/adoptium/adoptium-support/issues"/>
+    <property name="java.io.tmpdir" value="/tmp"/>
+    <property name="java.version" value="17.0.16"/>
+    <property name="user.dir" value="/home/runner/work/service-provider-enforcer-rule/service-provider-enforcer-rule"/>
+    <property name="os.arch" value="amd64"/>
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
+    <property name="native.encoding" value="UTF-8"/>
+    <property name="java.library.path" value="/usr/java/packages/lib:/usr/lib64:/lib64:/lib:/usr/lib"/>
+    <property name="java.vm.info" value="mixed mode, sharing"/>
+    <property name="java.vendor" value="Eclipse Adoptium"/>
+    <property name="java.vm.version" value="17.0.16+8"/>
+    <property name="java.specification.maintenance.version" value="1"/>
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
+    <property name="java.class.version" value="61.0"/>
+  </properties>
+  <testcase name="testExecute_AbstractServiceWithInheritanceChain" classname="io.flomava.ServiceRegistrationRuleTest" time="1.191">
+    <system-err><![CDATA[[main] INFO io.flomava.ServiceRegistrationRule - Checking service registration for interfaces: [com.example.AbstractTestService]
+[main] INFO io.flomava.ServiceRegistrationRule - Using enforcement strategy: FAIL
+[main] INFO io.flomava.ServiceRegistrationRule - Scanning packages: ALL
+[main] DEBUG io.flomava.ServiceRegistrationRule - === Checking service interface: com.example.AbstractTestService ===
+[main] DEBUG io.flomava.ServiceRegistrationRule - Looking for implementations of com.example.AbstractTestService in /tmp/junit-10400437266745864504/classes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-10400437266745864504/classes/com/example/AbstractBaseTestServiceImpl.class -> com.example.AbstractBaseTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.AbstractBaseTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/AbstractBaseTestServiceImpl, access=1025, superName=com/example/AbstractTestService, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-10400437266745864504/classes/com/example/ConcreteTestServiceImpl.class -> com.example.ConcreteTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.ConcreteTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/ConcreteTestServiceImpl, access=1, superName=com/example/AbstractBaseTestServiceImpl, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-10400437266745864504/classes/com/example/AbstractTestService.class -> com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/AbstractTestService, access=1025, superName=java/lang/Object, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Collected 3 class nodes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.AbstractTestService, isInterface=false, isAbstract=true
+[main] DEBUG io.flomava.ServiceRegistrationRule - Skipping com.example.AbstractTestService (interface or abstract)
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.ConcreteTestServiceImpl, isInterface=false, isAbstract=false
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking if com.example.ConcreteTestServiceImpl implements/extends com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.ConcreteTestServiceImpl against com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/ConcreteTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=com/example/AbstractBaseTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking superclass: com/example/AbstractBaseTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Superclass com/example/AbstractBaseTestServiceImpl found in classNodes
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.AbstractBaseTestServiceImpl against com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/AbstractBaseTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=com/example/AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking superclass: com/example/AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Superclass com/example/AbstractTestService found in classNodes
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.AbstractTestService against com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=java/lang/Object
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✓ Direct match: com.example.AbstractTestService IS com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✓ Inheritance match via superclass: com.example.AbstractBaseTestServiceImpl -> com.example.AbstractTestService -> com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✓ Inheritance match via superclass: com.example.ConcreteTestServiceImpl -> com.example.AbstractBaseTestServiceImpl -> com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - ✓ com.example.ConcreteTestServiceImpl IS an implementation of com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.AbstractBaseTestServiceImpl, isInterface=false, isAbstract=true
+[main] DEBUG io.flomava.ServiceRegistrationRule - Skipping com.example.AbstractBaseTestServiceImpl (interface or abstract)
+[main] DEBUG io.flomava.ServiceRegistrationRule - Final implementations found: [com.example.ConcreteTestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 implementations: [com.example.ConcreteTestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 registered services: [com.example.ConcreteTestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Unregistered implementations: []
+[main] DEBUG io.flomava.ServiceRegistrationRule - Non-existent registrations: []
+[main] INFO io.flomava.ServiceRegistrationRule - ✓ [com.example.AbstractTestService] All implementations properly registered (1 implementations)
+]]></system-err>
+  </testcase>
+  <testcase name="testExecute_NoServiceInterfacesConfigured_ThrowsException" classname="io.flomava.ServiceRegistrationRuleTest" time="0.02"/>
+  <testcase name="testExecute_AllImplementationsRegistered_Success" classname="io.flomava.ServiceRegistrationRuleTest" time="0.015">
+    <system-err><![CDATA[[main] INFO io.flomava.ServiceRegistrationRule - Checking service registration for interfaces: [com.example.TestService]
+[main] INFO io.flomava.ServiceRegistrationRule - Using enforcement strategy: FAIL
+[main] INFO io.flomava.ServiceRegistrationRule - Scanning packages: ALL
+[main] DEBUG io.flomava.ServiceRegistrationRule - === Checking service interface: com.example.TestService ===
+[main] DEBUG io.flomava.ServiceRegistrationRule - Looking for implementations of com.example.TestService in /tmp/junit-10076549122544673947/classes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-10076549122544673947/classes/com/example/TestServiceImpl.class -> com.example.TestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.TestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/TestServiceImpl, access=1, superName=java/lang/Object, interfaces=[com/example/TestService]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-10076549122544673947/classes/com/example/TestService.class -> com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/TestService, access=1537, superName=java/lang/Object, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Collected 2 class nodes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.TestService, isInterface=true, isAbstract=true
+[main] DEBUG io.flomava.ServiceRegistrationRule - Skipping com.example.TestService (interface or abstract)
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.TestServiceImpl, isInterface=false, isAbstract=false
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking if com.example.TestServiceImpl implements/extends com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.TestServiceImpl against com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/TestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=java/lang/Object
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[com/example/TestService]
+[main] INFO io.flomava.ServiceRegistrationRule -   Checking interface: com/example/TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✓ Interface match: com.example.TestServiceImpl implements com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - ✓ com.example.TestServiceImpl IS an implementation of com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Final implementations found: [com.example.TestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 implementations: [com.example.TestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 registered services: [com.example.TestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Unregistered implementations: []
+[main] DEBUG io.flomava.ServiceRegistrationRule - Non-existent registrations: []
+[main] INFO io.flomava.ServiceRegistrationRule - ✓ [com.example.TestService] All implementations properly registered (1 implementations)
+]]></system-err>
+  </testcase>
+  <testcase name="testExecute_PackageFiltering" classname="io.flomava.ServiceRegistrationRuleTest" time="0.016">
+    <system-err><![CDATA[[main] INFO io.flomava.ServiceRegistrationRule - Checking service registration for interfaces: [com.example.TestService]
+[main] INFO io.flomava.ServiceRegistrationRule - Using enforcement strategy: FAIL
+[main] INFO io.flomava.ServiceRegistrationRule - Scanning packages: [com.example.allowed]
+[main] DEBUG io.flomava.ServiceRegistrationRule - === Checking service interface: com.example.TestService ===
+[main] DEBUG io.flomava.ServiceRegistrationRule - Looking for implementations of com.example.TestService in /tmp/junit-5999548598353361872/classes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-5999548598353361872/classes/com/example/allowed/TestServiceImpl1.class -> com.example.allowed.TestServiceImpl1
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.allowed.TestServiceImpl1
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/allowed/TestServiceImpl1, access=1, superName=java/lang/Object, interfaces=[com/example/TestService]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-5999548598353361872/classes/com/example/forbidden/TestServiceImpl2.class -> com.example.forbidden.TestServiceImpl2
+[main] DEBUG io.flomava.ServiceRegistrationRule - Skipping class (not in scan packages): com.example.forbidden.TestServiceImpl2
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-5999548598353361872/classes/com/example/TestService.class -> com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Skipping class (not in scan packages): com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Collected 1 class nodes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.allowed.TestServiceImpl1, isInterface=false, isAbstract=false
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking if com.example.allowed.TestServiceImpl1 implements/extends com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.allowed.TestServiceImpl1 against com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/allowed/TestServiceImpl1
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=java/lang/Object
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[com/example/TestService]
+[main] INFO io.flomava.ServiceRegistrationRule -   Checking interface: com/example/TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✓ Interface match: com.example.allowed.TestServiceImpl1 implements com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - ✓ com.example.allowed.TestServiceImpl1 IS an implementation of com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Final implementations found: [com.example.allowed.TestServiceImpl1]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 implementations: [com.example.allowed.TestServiceImpl1]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 registered services: [com.example.allowed.TestServiceImpl1]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Unregistered implementations: []
+[main] DEBUG io.flomava.ServiceRegistrationRule - Non-existent registrations: []
+[main] INFO io.flomava.ServiceRegistrationRule - ✓ [com.example.TestService] All implementations properly registered (1 implementations)
+]]></system-err>
+  </testcase>
+  <testcase name="testExecute_UnregisteredImplementation_WarnStrategy_Success" classname="io.flomava.ServiceRegistrationRuleTest" time="0.015">
+    <system-err><![CDATA[[main] INFO io.flomava.ServiceRegistrationRule - Checking service registration for interfaces: [com.example.TestService]
+[main] INFO io.flomava.ServiceRegistrationRule - Using enforcement strategy: WARN
+[main] INFO io.flomava.ServiceRegistrationRule - Scanning packages: ALL
+[main] DEBUG io.flomava.ServiceRegistrationRule - === Checking service interface: com.example.TestService ===
+[main] DEBUG io.flomava.ServiceRegistrationRule - Looking for implementations of com.example.TestService in /tmp/junit-15739049502950537920/classes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-15739049502950537920/classes/com/example/TestServiceImpl.class -> com.example.TestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.TestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/TestServiceImpl, access=1, superName=java/lang/Object, interfaces=[com/example/TestService]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-15739049502950537920/classes/com/example/TestService.class -> com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/TestService, access=1537, superName=java/lang/Object, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Collected 2 class nodes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.TestService, isInterface=true, isAbstract=true
+[main] DEBUG io.flomava.ServiceRegistrationRule - Skipping com.example.TestService (interface or abstract)
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.TestServiceImpl, isInterface=false, isAbstract=false
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking if com.example.TestServiceImpl implements/extends com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.TestServiceImpl against com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/TestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=java/lang/Object
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[com/example/TestService]
+[main] INFO io.flomava.ServiceRegistrationRule -   Checking interface: com/example/TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✓ Interface match: com.example.TestServiceImpl implements com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - ✓ com.example.TestServiceImpl IS an implementation of com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Final implementations found: [com.example.TestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 implementations: [com.example.TestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 0 registered services: []
+[main] DEBUG io.flomava.ServiceRegistrationRule - Unregistered implementations: [com.example.TestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Non-existent registrations: []
+[main] WARN io.flomava.ServiceRegistrationRule - ─────────────────────────────────────────────
+[main] WARN io.flomava.ServiceRegistrationRule - Service Interface: com.example.TestService
+[main] WARN io.flomava.ServiceRegistrationRule - ✗ Unregistered implementations (1):
+[main] WARN io.flomava.ServiceRegistrationRule -     com.example.TestServiceImpl
+[main] WARN io.flomava.ServiceRegistrationRule - ─────────────────────────────────────────────
+]]></system-err>
+  </testcase>
+  <testcase name="testExecute_AbstractClassHandling" classname="io.flomava.ServiceRegistrationRuleTest" time="0.016">
+    <system-err><![CDATA[[main] INFO io.flomava.ServiceRegistrationRule - Checking service registration for interfaces: [com.example.TestService]
+[main] INFO io.flomava.ServiceRegistrationRule - Using enforcement strategy: FAIL
+[main] INFO io.flomava.ServiceRegistrationRule - Scanning packages: ALL
+[main] DEBUG io.flomava.ServiceRegistrationRule - === Checking service interface: com.example.TestService ===
+[main] DEBUG io.flomava.ServiceRegistrationRule - Looking for implementations of com.example.TestService in /tmp/junit-16754457926782467625/classes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-16754457926782467625/classes/com/example/ConcreteTestServiceImpl.class -> com.example.ConcreteTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.ConcreteTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/ConcreteTestServiceImpl, access=1, superName=java/lang/Object, interfaces=[com/example/TestService]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-16754457926782467625/classes/com/example/AbstractTestServiceImpl.class -> com.example.AbstractTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.AbstractTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/AbstractTestServiceImpl, access=1025, superName=java/lang/Object, interfaces=[com/example/TestService]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-16754457926782467625/classes/com/example/TestService.class -> com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/TestService, access=1537, superName=java/lang/Object, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Collected 3 class nodes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.AbstractTestServiceImpl, isInterface=false, isAbstract=true
+[main] DEBUG io.flomava.ServiceRegistrationRule - Skipping com.example.AbstractTestServiceImpl (interface or abstract)
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.TestService, isInterface=true, isAbstract=true
+[main] DEBUG io.flomava.ServiceRegistrationRule - Skipping com.example.TestService (interface or abstract)
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.ConcreteTestServiceImpl, isInterface=false, isAbstract=false
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking if com.example.ConcreteTestServiceImpl implements/extends com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.ConcreteTestServiceImpl against com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/ConcreteTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=java/lang/Object
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[com/example/TestService]
+[main] INFO io.flomava.ServiceRegistrationRule -   Checking interface: com/example/TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✓ Interface match: com.example.ConcreteTestServiceImpl implements com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - ✓ com.example.ConcreteTestServiceImpl IS an implementation of com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Final implementations found: [com.example.ConcreteTestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 implementations: [com.example.ConcreteTestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 registered services: [com.example.ConcreteTestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Unregistered implementations: []
+[main] DEBUG io.flomava.ServiceRegistrationRule - Non-existent registrations: []
+[main] INFO io.flomava.ServiceRegistrationRule - ✓ [com.example.TestService] All implementations properly registered (1 implementations)
+]]></system-err>
+  </testcase>
+  <testcase name="testExecute_NonExistentRegisteredService" classname="io.flomava.ServiceRegistrationRuleTest" time="0.022">
+    <system-err><![CDATA[[main] INFO io.flomava.ServiceRegistrationRule - Checking service registration for interfaces: [com.example.TestService]
+[main] INFO io.flomava.ServiceRegistrationRule - Using enforcement strategy: WARN
+[main] INFO io.flomava.ServiceRegistrationRule - Scanning packages: ALL
+[main] DEBUG io.flomava.ServiceRegistrationRule - === Checking service interface: com.example.TestService ===
+[main] DEBUG io.flomava.ServiceRegistrationRule - Looking for implementations of com.example.TestService in /tmp/junit-1413459376354914734/classes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-1413459376354914734/classes/com/example/TestService.class -> com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/TestService, access=1537, superName=java/lang/Object, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Collected 1 class nodes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.TestService, isInterface=true, isAbstract=true
+[main] DEBUG io.flomava.ServiceRegistrationRule - Skipping com.example.TestService (interface or abstract)
+[main] DEBUG io.flomava.ServiceRegistrationRule - Final implementations found: []
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 0 implementations: []
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 registered services: [com.example.NonExistentImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Unregistered implementations: []
+[main] DEBUG io.flomava.ServiceRegistrationRule - Non-existent registrations: [com.example.NonExistentImpl]
+[main] WARN io.flomava.ServiceRegistrationRule - ─────────────────────────────────────────────
+[main] WARN io.flomava.ServiceRegistrationRule - Service Interface: com.example.TestService
+[main] WARN io.flomava.ServiceRegistrationRule - ! Registered but non-existent implementations (1):
+[main] WARN io.flomava.ServiceRegistrationRule -     com.example.NonExistentImpl
+[main] WARN io.flomava.ServiceRegistrationRule - ─────────────────────────────────────────────
+]]></system-err>
+  </testcase>
+  <testcase name="testExecute_UnregisteredImplementation_FailStrategy_ThrowsException" classname="io.flomava.ServiceRegistrationRuleTest" time="0.017">
+    <system-err><![CDATA[[main] INFO io.flomava.ServiceRegistrationRule - Checking service registration for interfaces: [com.example.TestService]
+[main] INFO io.flomava.ServiceRegistrationRule - Using enforcement strategy: FAIL
+[main] INFO io.flomava.ServiceRegistrationRule - Scanning packages: ALL
+[main] DEBUG io.flomava.ServiceRegistrationRule - === Checking service interface: com.example.TestService ===
+[main] DEBUG io.flomava.ServiceRegistrationRule - Looking for implementations of com.example.TestService in /tmp/junit-8442829203635524313/classes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-8442829203635524313/classes/com/example/TestServiceImpl.class -> com.example.TestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.TestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/TestServiceImpl, access=1, superName=java/lang/Object, interfaces=[com/example/TestService]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-8442829203635524313/classes/com/example/TestService.class -> com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/TestService, access=1537, superName=java/lang/Object, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Collected 2 class nodes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.TestService, isInterface=true, isAbstract=true
+[main] DEBUG io.flomava.ServiceRegistrationRule - Skipping com.example.TestService (interface or abstract)
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.TestServiceImpl, isInterface=false, isAbstract=false
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking if com.example.TestServiceImpl implements/extends com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.TestServiceImpl against com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/TestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=java/lang/Object
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[com/example/TestService]
+[main] INFO io.flomava.ServiceRegistrationRule -   Checking interface: com/example/TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✓ Interface match: com.example.TestServiceImpl implements com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - ✓ com.example.TestServiceImpl IS an implementation of com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Final implementations found: [com.example.TestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 implementations: [com.example.TestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 0 registered services: []
+[main] DEBUG io.flomava.ServiceRegistrationRule - Unregistered implementations: [com.example.TestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Non-existent registrations: []
+[main] ERROR io.flomava.ServiceRegistrationRule - ─────────────────────────────────────────────
+[main] ERROR io.flomava.ServiceRegistrationRule - Service Interface: com.example.TestService
+[main] ERROR io.flomava.ServiceRegistrationRule - ✗ Unregistered implementations (1):
+[main] ERROR io.flomava.ServiceRegistrationRule -     com.example.TestServiceImpl
+[main] ERROR io.flomava.ServiceRegistrationRule - ─────────────────────────────────────────────
+]]></system-err>
+  </testcase>
+  <testcase name="testExecute_NullServiceInterfaces_ThrowsException" classname="io.flomava.ServiceRegistrationRuleTest" time="0.007"/>
+  <testcase name="testExecute_MultipleInterfaces" classname="io.flomava.ServiceRegistrationRuleTest" time="0.027">
+    <system-err><![CDATA[[main] INFO io.flomava.ServiceRegistrationRule - Checking service registration for interfaces: [com.example.Service1, com.example.Service2]
+[main] INFO io.flomava.ServiceRegistrationRule - Using enforcement strategy: FAIL
+[main] INFO io.flomava.ServiceRegistrationRule - Scanning packages: ALL
+[main] DEBUG io.flomava.ServiceRegistrationRule - === Checking service interface: com.example.Service1 ===
+[main] DEBUG io.flomava.ServiceRegistrationRule - Looking for implementations of com.example.Service1 in /tmp/junit-13300622881080920961/classes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-13300622881080920961/classes/com/example/Service2Impl.class -> com.example.Service2Impl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.Service2Impl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/Service2Impl, access=1, superName=java/lang/Object, interfaces=[com/example/Service2]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-13300622881080920961/classes/com/example/Service2.class -> com.example.Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/Service2, access=1537, superName=java/lang/Object, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-13300622881080920961/classes/com/example/Service1.class -> com.example.Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/Service1, access=1537, superName=java/lang/Object, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-13300622881080920961/classes/com/example/Service1Impl.class -> com.example.Service1Impl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.Service1Impl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/Service1Impl, access=1, superName=java/lang/Object, interfaces=[com/example/Service1]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Collected 4 class nodes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.Service1, isInterface=true, isAbstract=true
+[main] DEBUG io.flomava.ServiceRegistrationRule - Skipping com.example.Service1 (interface or abstract)
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.Service1Impl, isInterface=false, isAbstract=false
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking if com.example.Service1Impl implements/extends com.example.Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.Service1Impl against com.example.Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/Service1Impl
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=java/lang/Object
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[com/example/Service1]
+[main] INFO io.flomava.ServiceRegistrationRule -   Checking interface: com/example/Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✓ Interface match: com.example.Service1Impl implements com.example.Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule - ✓ com.example.Service1Impl IS an implementation of com.example.Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.Service2Impl, isInterface=false, isAbstract=false
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking if com.example.Service2Impl implements/extends com.example.Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.Service2Impl against com.example.Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/Service2Impl
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=java/lang/Object
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[com/example/Service2]
+[main] INFO io.flomava.ServiceRegistrationRule -   Checking interface: com/example/Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Interface com/example/Service2 found in classNodes
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.Service2 against com.example.Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=java/lang/Object
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✗ No match found for com.example.Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✗ No match found for com.example.Service2Impl
+[main] DEBUG io.flomava.ServiceRegistrationRule - ✗ com.example.Service2Impl is NOT an implementation of com.example.Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.Service2, isInterface=true, isAbstract=true
+[main] DEBUG io.flomava.ServiceRegistrationRule - Skipping com.example.Service2 (interface or abstract)
+[main] DEBUG io.flomava.ServiceRegistrationRule - Final implementations found: [com.example.Service1Impl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 implementations: [com.example.Service1Impl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 registered services: [com.example.Service1Impl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Unregistered implementations: []
+[main] DEBUG io.flomava.ServiceRegistrationRule - Non-existent registrations: []
+[main] DEBUG io.flomava.ServiceRegistrationRule - === Checking service interface: com.example.Service2 ===
+[main] DEBUG io.flomava.ServiceRegistrationRule - Looking for implementations of com.example.Service2 in /tmp/junit-13300622881080920961/classes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-13300622881080920961/classes/com/example/Service2Impl.class -> com.example.Service2Impl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.Service2Impl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/Service2Impl, access=1, superName=java/lang/Object, interfaces=[com/example/Service2]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-13300622881080920961/classes/com/example/Service2.class -> com.example.Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/Service2, access=1537, superName=java/lang/Object, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-13300622881080920961/classes/com/example/Service1.class -> com.example.Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/Service1, access=1537, superName=java/lang/Object, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-13300622881080920961/classes/com/example/Service1Impl.class -> com.example.Service1Impl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.Service1Impl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/Service1Impl, access=1, superName=java/lang/Object, interfaces=[com/example/Service1]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Collected 4 class nodes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.Service1, isInterface=true, isAbstract=true
+[main] DEBUG io.flomava.ServiceRegistrationRule - Skipping com.example.Service1 (interface or abstract)
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.Service1Impl, isInterface=false, isAbstract=false
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking if com.example.Service1Impl implements/extends com.example.Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.Service1Impl against com.example.Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/Service1Impl
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=java/lang/Object
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[com/example/Service1]
+[main] INFO io.flomava.ServiceRegistrationRule -   Checking interface: com/example/Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Interface com/example/Service1 found in classNodes
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.Service1 against com.example.Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=java/lang/Object
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✗ No match found for com.example.Service1
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✗ No match found for com.example.Service1Impl
+[main] DEBUG io.flomava.ServiceRegistrationRule - ✗ com.example.Service1Impl is NOT an implementation of com.example.Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.Service2Impl, isInterface=false, isAbstract=false
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking if com.example.Service2Impl implements/extends com.example.Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.Service2Impl against com.example.Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/Service2Impl
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=java/lang/Object
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[com/example/Service2]
+[main] INFO io.flomava.ServiceRegistrationRule -   Checking interface: com/example/Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✓ Interface match: com.example.Service2Impl implements com.example.Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule - ✓ com.example.Service2Impl IS an implementation of com.example.Service2
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.Service2, isInterface=true, isAbstract=true
+[main] DEBUG io.flomava.ServiceRegistrationRule - Skipping com.example.Service2 (interface or abstract)
+[main] DEBUG io.flomava.ServiceRegistrationRule - Final implementations found: [com.example.Service2Impl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 implementations: [com.example.Service2Impl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 0 registered services: []
+[main] DEBUG io.flomava.ServiceRegistrationRule - Unregistered implementations: [com.example.Service2Impl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Non-existent registrations: []
+[main] ERROR io.flomava.ServiceRegistrationRule - ─────────────────────────────────────────────
+[main] ERROR io.flomava.ServiceRegistrationRule - Service Interface: com.example.Service2
+[main] ERROR io.flomava.ServiceRegistrationRule - ✗ Unregistered implementations (1):
+[main] ERROR io.flomava.ServiceRegistrationRule -     com.example.Service2Impl
+[main] ERROR io.flomava.ServiceRegistrationRule - ─────────────────────────────────────────────
+[main] INFO io.flomava.ServiceRegistrationRule - ✓ [com.example.Service1] All implementations properly registered (1 implementations)
+]]></system-err>
+  </testcase>
+  <testcase name="testExecute_AbstractServiceWithUnregisteredInheritanceChain" classname="io.flomava.ServiceRegistrationRuleTest" time="0.022">
+    <system-err><![CDATA[[main] INFO io.flomava.ServiceRegistrationRule - Checking service registration for interfaces: [com.example.AbstractTestService]
+[main] INFO io.flomava.ServiceRegistrationRule - Using enforcement strategy: FAIL
+[main] INFO io.flomava.ServiceRegistrationRule - Scanning packages: ALL
+[main] DEBUG io.flomava.ServiceRegistrationRule - === Checking service interface: com.example.AbstractTestService ===
+[main] DEBUG io.flomava.ServiceRegistrationRule - Looking for implementations of com.example.AbstractTestService in /tmp/junit-14076503802497039040/classes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-14076503802497039040/classes/com/example/BaseTestServiceImpl.class -> com.example.BaseTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.BaseTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/BaseTestServiceImpl, access=1, superName=com/example/AbstractTestService, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-14076503802497039040/classes/com/example/ConcreteTestServiceImpl.class -> com.example.ConcreteTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.ConcreteTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/ConcreteTestServiceImpl, access=1, superName=com/example/BaseTestServiceImpl, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-14076503802497039040/classes/com/example/AbstractTestService.class -> com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/AbstractTestService, access=1025, superName=java/lang/Object, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Collected 3 class nodes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.AbstractTestService, isInterface=false, isAbstract=true
+[main] DEBUG io.flomava.ServiceRegistrationRule - Skipping com.example.AbstractTestService (interface or abstract)
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.ConcreteTestServiceImpl, isInterface=false, isAbstract=false
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking if com.example.ConcreteTestServiceImpl implements/extends com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.ConcreteTestServiceImpl against com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/ConcreteTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=com/example/BaseTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking superclass: com/example/BaseTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Superclass com/example/BaseTestServiceImpl found in classNodes
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.BaseTestServiceImpl against com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/BaseTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=com/example/AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking superclass: com/example/AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Superclass com/example/AbstractTestService found in classNodes
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.AbstractTestService against com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=java/lang/Object
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✓ Direct match: com.example.AbstractTestService IS com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✓ Inheritance match via superclass: com.example.BaseTestServiceImpl -> com.example.AbstractTestService -> com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✓ Inheritance match via superclass: com.example.ConcreteTestServiceImpl -> com.example.BaseTestServiceImpl -> com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - ✓ com.example.ConcreteTestServiceImpl IS an implementation of com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.BaseTestServiceImpl, isInterface=false, isAbstract=false
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking if com.example.BaseTestServiceImpl implements/extends com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.BaseTestServiceImpl against com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/BaseTestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=com/example/AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking superclass: com/example/AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Superclass com/example/AbstractTestService found in classNodes
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.AbstractTestService against com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=java/lang/Object
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✓ Direct match: com.example.AbstractTestService IS com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✓ Inheritance match via superclass: com.example.BaseTestServiceImpl -> com.example.AbstractTestService -> com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - ✓ com.example.BaseTestServiceImpl IS an implementation of com.example.AbstractTestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Final implementations found: [com.example.BaseTestServiceImpl, com.example.ConcreteTestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 2 implementations: [com.example.BaseTestServiceImpl, com.example.ConcreteTestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 0 registered services: []
+[main] DEBUG io.flomava.ServiceRegistrationRule - Unregistered implementations: [com.example.BaseTestServiceImpl, com.example.ConcreteTestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Non-existent registrations: []
+[main] ERROR io.flomava.ServiceRegistrationRule - ─────────────────────────────────────────────
+[main] ERROR io.flomava.ServiceRegistrationRule - Service Interface: com.example.AbstractTestService
+[main] ERROR io.flomava.ServiceRegistrationRule - ✗ Unregistered implementations (2):
+[main] ERROR io.flomava.ServiceRegistrationRule -     com.example.BaseTestServiceImpl
+[main] ERROR io.flomava.ServiceRegistrationRule -     com.example.ConcreteTestServiceImpl
+[main] ERROR io.flomava.ServiceRegistrationRule - ─────────────────────────────────────────────
+]]></system-err>
+  </testcase>
+  <testcase name="testExecute_ServiceRegistrationWithComments" classname="io.flomava.ServiceRegistrationRuleTest" time="0.016">
+    <system-err><![CDATA[[main] INFO io.flomava.ServiceRegistrationRule - Checking service registration for interfaces: [com.example.TestService]
+[main] INFO io.flomava.ServiceRegistrationRule - Using enforcement strategy: FAIL
+[main] INFO io.flomava.ServiceRegistrationRule - Scanning packages: ALL
+[main] DEBUG io.flomava.ServiceRegistrationRule - === Checking service interface: com.example.TestService ===
+[main] DEBUG io.flomava.ServiceRegistrationRule - Looking for implementations of com.example.TestService in /tmp/junit-15059704080681017948/classes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-15059704080681017948/classes/com/example/TestServiceImpl.class -> com.example.TestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.TestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/TestServiceImpl, access=1, superName=java/lang/Object, interfaces=[com/example/TestService]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-15059704080681017948/classes/com/example/TestService.class -> com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/TestService, access=1537, superName=java/lang/Object, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Collected 2 class nodes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.TestService, isInterface=true, isAbstract=true
+[main] DEBUG io.flomava.ServiceRegistrationRule - Skipping com.example.TestService (interface or abstract)
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.TestServiceImpl, isInterface=false, isAbstract=false
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking if com.example.TestServiceImpl implements/extends com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.TestServiceImpl against com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/TestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=java/lang/Object
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[com/example/TestService]
+[main] INFO io.flomava.ServiceRegistrationRule -   Checking interface: com/example/TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✓ Interface match: com.example.TestServiceImpl implements com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - ✓ com.example.TestServiceImpl IS an implementation of com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Final implementations found: [com.example.TestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 implementations: [com.example.TestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 registered services: [com.example.TestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Unregistered implementations: []
+[main] DEBUG io.flomava.ServiceRegistrationRule - Non-existent registrations: []
+[main] INFO io.flomava.ServiceRegistrationRule - ✓ [com.example.TestService] All implementations properly registered (1 implementations)
+]]></system-err>
+  </testcase>
+  <testcase name="testExecute_ServiceRegisteredViaModuleInfo" classname="io.flomava.ServiceRegistrationRuleTest" time="0.015">
+    <system-err><![CDATA[[main] INFO io.flomava.ServiceRegistrationRule - Checking service registration for interfaces: [com.example.TestService]
+[main] INFO io.flomava.ServiceRegistrationRule - Using enforcement strategy: FAIL
+[main] INFO io.flomava.ServiceRegistrationRule - Scanning packages: ALL
+[main] DEBUG io.flomava.ServiceRegistrationRule - === Checking service interface: com.example.TestService ===
+[main] DEBUG io.flomava.ServiceRegistrationRule - Looking for implementations of com.example.TestService in /tmp/junit-16925734117648084419/classes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-16925734117648084419/classes/com/example/TestServiceImpl.class -> com.example.TestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.TestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/TestServiceImpl, access=1, superName=java/lang/Object, interfaces=[com/example/TestService]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-16925734117648084419/classes/com/example/TestService.class -> com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: com/example/TestService, access=1537, superName=java/lang/Object, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found class file: /tmp/junit-16925734117648084419/classes/module-info.class -> module-info
+[main] DEBUG io.flomava.ServiceRegistrationRule - Scanning class: module-info
+[main] DEBUG io.flomava.ServiceRegistrationRule - Loaded ClassNode: module-info, access=32768, superName=null, interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Collected 3 class nodes
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.TestService, isInterface=true, isAbstract=true
+[main] DEBUG io.flomava.ServiceRegistrationRule - Skipping com.example.TestService (interface or abstract)
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: module-info, isInterface=false, isAbstract=false
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking if module-info implements/extends com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking module-info against com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=module-info
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=null
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[]
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✗ No match found for module-info
+[main] DEBUG io.flomava.ServiceRegistrationRule - ✗ module-info is NOT an implementation of com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking node: com.example.TestServiceImpl, isInterface=false, isAbstract=false
+[main] DEBUG io.flomava.ServiceRegistrationRule - Checking if com.example.TestServiceImpl implements/extends com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   Checking com.example.TestServiceImpl against com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     classNode.name=com/example/TestServiceImpl
+[main] DEBUG io.flomava.ServiceRegistrationRule -     internalServiceName=com/example/TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -     superName=java/lang/Object
+[main] DEBUG io.flomava.ServiceRegistrationRule -     interfaces=[com/example/TestService]
+[main] INFO io.flomava.ServiceRegistrationRule -   Checking interface: com/example/TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule -   ✓ Interface match: com.example.TestServiceImpl implements com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - ✓ com.example.TestServiceImpl IS an implementation of com.example.TestService
+[main] DEBUG io.flomava.ServiceRegistrationRule - Final implementations found: [com.example.TestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 implementations: [com.example.TestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Found 1 registered services: [com.example.TestServiceImpl]
+[main] DEBUG io.flomava.ServiceRegistrationRule - Unregistered implementations: []
+[main] DEBUG io.flomava.ServiceRegistrationRule - Non-existent registrations: []
+[main] INFO io.flomava.ServiceRegistrationRule - ✓ [com.example.TestService] All implementations properly registered (1 implementations)
+]]></system-err>
+  </testcase>
+</testsuite>
