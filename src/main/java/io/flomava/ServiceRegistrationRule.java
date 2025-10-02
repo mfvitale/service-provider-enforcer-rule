@@ -219,7 +219,7 @@ public class ServiceRegistrationRule extends AbstractEnforcerRule {
         // Check implemented interfaces
         if (classNode.interfaces != null) {
             for (String interfaceName : classNode.interfaces) {
-                getLog().info("  Checking interface: " + interfaceName);
+                getLog().debug("  Checking interface: " + interfaceName);
                 if (interfaceName.equals(internalServiceName)) {
                     getLog().debug("  ✓ Interface match: " + currentClassName + " implements " + serviceInterface);
                     return true;
